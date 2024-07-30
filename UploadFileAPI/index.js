@@ -9,8 +9,8 @@ const mongoose = require("mongoose");
 const { connectMongoDB } = require("./connection");
 
 const app = express();
-// const PORT = process.env.PORT || 8000;
-const PORT = 8000;
+const PORT = process.env.PORT || 8000;
+// const PORT = 8000;
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb){
@@ -46,13 +46,13 @@ app.post("/upload", upload.single("profileImage"), (req, res) => {
     return res.redirect("/");
 })
 
-// const startServer = async () => {
-//     try {
-//       app.listen(PORT, () => console.log('Server started at PORT:', PORT));
-//     } catch (error) {
-//       console.error('Failed to connect to the database', error);
-//     }
-//   };
+const startServer = async () => {
+    try {
+      app.listen(PORT, () => console.log('Server started at PORT:', PORT));
+    } catch (error) {
+      console.error('Failed to connect to the database', error);
+    }
+  };
   
-//   startServer();
-app.listen(PORT, () => console.log(`Server Started at this PORT : 8000`));
+  startServer();
+// app.listen(PORT, () => console.log(`Server Started at this PORT : 8000`));
