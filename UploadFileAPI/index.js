@@ -4,6 +4,8 @@ const Usermodel = require("./models/user");
 const path = require("path");
 const express = require("express");
 
+const { MongoClient, ServerApiVersion } = require('mongodb');
+
 const mongoose = require("mongoose");
 
 const { connectMongoDB } = require("./connection");
@@ -34,6 +36,14 @@ app.get("/", (req, res) => {
 });
 
 //Connection
+// const client = new MongoClient(uri, {
+//     serverApi: {
+//       version: ServerApiVersion.v1,
+//       strict: true,
+//       deprecationErrors: true,
+//     }
+//   });
+
 mongoose.connect(process.env.MONGO_URL).then( () => 
     console.log("Mongodb connected")
 );
