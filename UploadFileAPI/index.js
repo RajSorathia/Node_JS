@@ -9,7 +9,7 @@ const mongoose = require("mongoose");
 const { connectMongoDB } = require("./connection");
 
 const app = express();
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 5050;
 // const PORT = 8000;
 
 const storage = multer.diskStorage({
