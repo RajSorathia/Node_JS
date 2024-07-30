@@ -5,6 +5,8 @@ const path = require("path");
 const express = require("express");
 
 const { MongoClient, ServerApiVersion } = require('mongodb');
+const uri = "mongodb+srv://rajsorathiyaacusion:P@tel1092@cluster0.gzuvuub.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+
 
 const mongoose = require("mongoose");
 
@@ -44,7 +46,7 @@ app.get("/", (req, res) => {
 //     }
 //   });
 
-mongoose.connect(process.env.MONGO_URL).then( () => 
+mongoose.connect(uri).then( () => 
     console.log("Mongodb connected")
 );
   
