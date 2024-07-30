@@ -43,7 +43,7 @@ app.post("/upload", upload.single("profileImage"), (req, res) => {
     .then(result => res.json(result))
     .catch(err => console.log(err))
 
-    return res.redirect("/");
+    // return res.redirect("/");
 })
 
 const startServer = async () => {
