@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const User = new mongoose.Schema({
-    image : String
+    picpath : String
 })
 
 const Usermodel = mongoose.model("files",User);

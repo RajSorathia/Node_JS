@@ -1,60 +1,78 @@
-require('dotenv').config();
-const multer = require("multer");
+const express = require('express');
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const multer =  require('multer');
+const path = require('path');
 const Usermodel = require("./models/user");
-const path = require("path");
-const express = require("express");
 
-const mongoose = require("mongoose");
-
-const uri = 'mongodb+srv://rajsorathiyaacusion:rajacusion@cluster0.z8vtgf7.mongodb.net/UploadFileData?retryWrites=true&w=majority&appName=Cluster0';
-
-// const { connectMongoDB } = require("./connection");
-
-const app = express();
-const PORT = process.env.PORT || 5050;
-// const PORT = 8000;
 
 const storage = multer.diskStorage({
-    destination: function (req, file, cb){
-        return cb(null, "./uploads");
+    destination:function(req,file,cb){
+        cb(null,'./uploads')
     },
-    filename: function (req, file, cb){
-        return cb(null, `${Date.now()}-${file.originalname}`)
+    filename:function(req,file,cb){
+        cb(null,file.originalname)
     }
-});
-
-const upload = multer({ storage });
-
-app.set("view engine", "ejs");
-app.set("views", path.resolve("./Views"));
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: false}));
-
-app.get("/", (req, res) => {
-    return res.render("homepage");
-});
-
-//Connection
-mongoose.connect(uri).then( () => 
-    console.log("Mongodb connected")
-);
-  
-app.post("/upload", upload.single("profileImage"), (req, res) => {
-    Usermodel.create({ image: req.file.filename })
-    .then(result => res.json(result))
-    .catch(err => console.log(err))
-
-    // return res.redirect("/");
 })
+const upload = multer({storage:storage})
 
-const startServer = async () => {
+const app = express();
+
+mongoose.connect('mongodb://localhost:27017/UploadAPI')
+.then(()=>console.log('connected')).catch(err=>console.log('error ocured',err));
+
+app.set('views',path.resolve(__dirname,'Views'));
+app.set('view engine','ejs');
+
+const pathh = path.resolve(__dirname,'public');
+app.use(express.static(pathh));
+app.use(bodyParser.urlencoded({extended:false}));
+
+
+app.get("/", async (req, res) => {
     try {
-      app.listen(PORT, () => console.log('Server started at PORT:', PORT));
-    } catch (error) {
-      console.error('Failed to connect to the database', error);
+        const data = await Usermodel.find().exec();
+        if (data.length > 0) {
+            res.render('homepage', { data: data });
+        } else {
+            res.render('homepage', { data: {} });
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).send('An error occurred');
     }
-  };
-  
-  startServer();
-// app.listen(PORT, () => console.log(`Server Started at this PORT : 8000`));
+});
+
+app.post("/", upload.single('pic'), async (req, res) => {
+    try {
+        const x = 'uploads/' + req.file.originalname;
+        const temp = new Usermodel({
+            picpath: x
+        });
+        await temp.save();
+        res.redirect('/');
+    } catch (err) {
+        console.log(err);
+        res.status(500).send('An error occurred');
+    }
+});
+
+app.get("/download/:id", async (req, res) => {
+    try {
+        const data = await Usermodel.findById(req.params.id).exec();
+        if (data && data.picpath) {
+            // Change this line
+            const x = path.join(__dirname, data.picpath);
+            res.download(x);
+        } else {
+            res.status(404).send('File not found or picpath is undefined');
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).send('An error occurred');
+    }
+});
+
+
+const port  = process.env.PORT || 3000 ;
+app.listen(port,()=>console.log('server running at port'+port));
