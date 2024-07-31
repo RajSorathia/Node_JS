@@ -4,13 +4,11 @@ const Usermodel = require("./models/user");
 const path = require("path");
 const express = require("express");
 
-const { MongoClient } = require("mongodb");
-const uri = "mongodb+srv://rajsorathiyaacusion:P@tel1092@Cluster0.gzuvuub.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const mongoose = require("mongoose");
 
+const uri = 'mongodb+srv://rajsorathiyaacusion:rajacusion@cluster0.z8vtgf7.mongodb.net/UploadFileData?retryWrites=true&w=majority&appName=Cluster0';
 
-// const mongoose = require("mongoose");
-const client = new MongoClient(uri);
-const { connectMongoDB } = require("./connection");
+// const { connectMongoDB } = require("./connection");
 
 const app = express();
 const PORT = process.env.PORT || 5050;
@@ -38,15 +36,7 @@ app.get("/", (req, res) => {
 });
 
 //Connection
-// const client = new MongoClient(uri, {
-//     serverApi: {
-//       version: ServerApiVersion.v1,
-//       strict: true,
-//       deprecationErrors: true,
-//     }
-//   });
-
-client.connect(uri).then( () => 
+mongoose.connect(uri).then( () => 
     console.log("Mongodb connected")
 );
   
