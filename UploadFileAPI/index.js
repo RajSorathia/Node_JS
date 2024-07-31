@@ -4,12 +4,12 @@ const Usermodel = require("./models/user");
 const path = require("path");
 const express = require("express");
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = "mongodb+srv://rajsorathiyaacusion:P@tel1092@cluster0.gzuvuub.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const { MongoClient } = require("mongodb");
+const uri = "mongodb+srv://rajsorathiyaacusion:P@tel1092@Cluster0.gzuvuub.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 
-const mongoose = require("mongoose");
-
+// const mongoose = require("mongoose");
+const client = new MongoClient(uri);
 const { connectMongoDB } = require("./connection");
 
 const app = express();
@@ -46,7 +46,7 @@ app.get("/", (req, res) => {
 //     }
 //   });
 
-mongoose.connect(uri).then( () => 
+client.connect(uri).then( () => 
     console.log("Mongodb connected")
 );
   
