@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -5,6 +7,7 @@ const multer =  require('multer');
 const path = require('path');
 const Usermodel = require("./models/user");
 
+const uri = 'mongodb+srv://rajsorathiyaacusion:rajacusion@cluster0.z8vtgf7.mongodb.net/UploadFileData?retryWrites=true&w=majority&appName=Cluster0';
 
 const storage = multer.diskStorage({
     destination:function(req,file,cb){
@@ -18,7 +21,7 @@ const upload = multer({storage:storage})
 
 const app = express();
 
-mongoose.connect('mongodb://localhost:27017/UploadAPI')
+mongoose.connect(uri)
 .then(()=>console.log('connected')).catch(err=>console.log('error ocured',err));
 
 app.set('views',path.resolve(__dirname,'Views'));
@@ -73,6 +76,13 @@ app.get("/download/:id", async (req, res) => {
     }
 });
 
-
-const port  = process.env.PORT || 3000 ;
-app.listen(port,()=>console.log('server running at port'+port));
+const PORT = process.env.PORT || 5050;
+const startServer = async () => {
+    try {
+      app.listen(PORT, () => console.log('Server started at PORT:', PORT));
+    } catch (error) {
+      console.error('Failed to connect to the database', error);
+    }
+  };
+  
+  startServer();
