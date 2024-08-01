@@ -83,7 +83,6 @@ app.get("/list", async (req, res) => {
             id: file._id,
             filename: path.basename(file.picpath),
             uploadDate: file.createdAt,
-        
         }));
         res.json(fileDetails);
     } catch (err) {
@@ -92,7 +91,7 @@ app.get("/list", async (req, res) => {
     }
 });
 
-const PORT = process.env.PORT || 5050;
+const PORT = process.env.PORT || 1234;
 const startServer = async () => {
     try {
       app.listen(PORT, () => console.log('Server started at PORT:', PORT));
