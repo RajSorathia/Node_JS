@@ -83,7 +83,7 @@ app.get("/list", async (req, res) => {
             id: file._id,
             filename: path.basename(file.picpath),
             uploadDate: file.createdAt,
-            downloadLink: `/download/${file._id}`
+        
         }));
         res.json(fileDetails);
     } catch (err) {
