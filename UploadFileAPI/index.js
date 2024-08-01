@@ -76,6 +76,10 @@ app.get("/download/:id", async (req, res) => {
     }
 });
 
+app.get("/list", async (req, res) => {
+    const data = await Usermodel.findById(req.params.id).exex();
+    return res.json(data);
+})
 
 const PORT = process.env.PORT || 5050;
 const startServer = async () => {
