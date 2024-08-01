@@ -77,9 +77,20 @@ app.get("/download/:id", async (req, res) => {
 });
 
 app.get("/list", async (req, res) => {
-    const data = await Usermodel.findById(req.params.id).exex();
-    return res.json(data);
-})
+    try {
+        const files = await Usermodel.find().select('picpath createdAt').exec();
+        const fileDetails = files.map(file => ({
+            id: file._id,
+            filename: path.basename(file.picpath),
+            uploadDate: file.createdAt,
+            downloadLink: `/download/${file._id}`
+        }));
+        res.json(fileDetails);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'An error occurred while fetching file list' });
+    }
+});
 
 const PORT = process.env.PORT || 5050;
 const startServer = async () => {
