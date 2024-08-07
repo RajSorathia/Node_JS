@@ -48,7 +48,7 @@ app.get("/", async (req, res) => {
     }
 });
 
-app.post("/", upload.any(), async (req, res) => {
+app.post("/", upload.single('pic'), async (req, res) => {
     try {
         // const x = 'uploads/' + req.file.originalname;
         const temp = new Usermodel({
