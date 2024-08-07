@@ -19,16 +19,8 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({
-    storage:storage,
-    fileFilter : (req, file, cb) => {
-        if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg"){
-            cb(null, true);
-        } else {
-            cb(null, false);
-            return cb(new Error('Only .png .jpg and .jpeg files are allowed'));
-        }
-    }
-}).single('pic');
+    storage:storage
+});
 const app = express();
 
 mongoose.connect(uri)
@@ -41,7 +33,7 @@ const pathh = path.resolve(__dirname,'public');
 app.use(express.static(pathh));
 app.use(bodyParser.urlencoded({extended:false}));
 
-app.get("/", async (req, res) => {
+app.get("/", upload.single('pic'), async (req, res) => {
     try {  
         const data = await Usermodel.find().exec();
         if (data.length > 0) {
