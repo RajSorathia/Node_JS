@@ -46,6 +46,9 @@ app.get("/", async (req, res) => {
 });
 
 app.post("/", upload.single('pic'), async (req, res) => {
+    console.log(req.file);
+    console.log(req.body);
+    res.send('File received');
     try {
         const x = 'uploads/' + req.file.originalname;
         const temp = new Usermodel({
