@@ -61,7 +61,7 @@ app.get("/", async (req, res) => {
 
 app.post('/',upload.single('pic'),(req,res)=>{
     var x = 'uploads/'+req.file.originalname;
-    var temp = new picModel({
+    var temp = new Usermodel({
         picpath:x
     })
     temp.save((err,data)=>{
