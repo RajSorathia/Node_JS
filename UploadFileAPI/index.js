@@ -45,19 +45,32 @@ app.get("/", async (req, res) => {
     }
 });
 
-app.post("/", upload.single('pic'), async (req, res) => {
-    try {
-        const x = 'uploads/' + req.file.originalname;
-        const temp = new Usermodel({
-            picpath: x
-        });
-        await temp.save();
-        res.redirect('/');
-    } catch (err) {
-        console.log(err);
-        res.status(500).send('An error occurred');
-    }
-});
+// app.post("/", upload.single('pic'), async (req, res) => {
+//     try {
+//         const x = 'uploads/' + req.file.originalname;
+//         const temp = new Usermodel({
+//             picpath: x
+//         });
+//         await temp.save();
+//         res.redirect('/');
+//     } catch (err) {
+//         console.log(err);
+//         res.status(500).send('An error occurred');
+//     }
+// });
+
+app.post('/',upload.single('pic'),(req,res)=>{
+    var x = 'uploads/'+req.file.originalname;
+    var temp = new picModel({
+        picpath:x
+    })
+    temp.save((err,data)=>{
+        if(err){
+            console.log(err)
+        }
+        res.redirect('/')
+    })
+})
 
 // app.get("/download/:id", async (req, res) => {
 //     try {
