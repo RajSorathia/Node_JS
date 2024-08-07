@@ -11,7 +11,7 @@ const uri = 'mongodb+srv://rajsorathiyaacusion:rajacusion@cluster0.z8vtgf7.mongo
 
 const storage = multer.diskStorage({
     destination:function(req,file,cb){
-        cb(null,'..uploads/')
+        cb(null,'uploads/')
     },
     filename:function(req,file,cb){
         cb(null,file.originalname)
@@ -30,7 +30,8 @@ app.set('views',path.resolve(__dirname,'Views'));
 app.set('view engine','ejs');
 
 const pathh = path.resolve(__dirname,'public');
-app.use(express.static(pathh));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+// app.use(express.static(pathh));
 app.use(bodyParser.urlencoded({extended:false}));
 
 app.get("/", async (req, res) => {
@@ -49,9 +50,9 @@ app.get("/", async (req, res) => {
 
 app.post("/", upload.single('pic'), async (req, res) => {
     try {
-        const x = 'uploads/' + req.file.originalname;
+        // const x = 'uploads/' + req.file.originalname;
         const temp = new Usermodel({
-            picpath: x
+            picpath: req.file.path
         });
         await temp.save();
         res.redirect('/');
@@ -66,8 +67,8 @@ app.get("/download/:id", async (req, res) => {
         const data = await Usermodel.findById(req.params.id).exec();
         if (data && data.picpath) {
             // Change this line
-            const x = path.join(__dirname, data.picpath);
-            res.download(x);
+            // const x = path.join(__dirname, data.picpath);
+            res.download(data.picpath);
         } else {
             res.status(404).send('File not found or picpath is undefined');
         }
