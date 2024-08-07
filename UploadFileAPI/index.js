@@ -11,12 +11,12 @@ const uri = 'mongodb+srv://rajsorathiyaacusion:rajacusion@cluster0.z8vtgf7.mongo
 
 const storage = multer.diskStorage({
     destination:function(req,file,cb){
-        cb(null,".uploads/")
+        cb(null,".public/uploads/")
     },
     filename:function(req,file,cb){
         cb(null,file.originalname)
     }
-});
+})
 
 const upload = multer({
     storage:storage
@@ -33,7 +33,7 @@ const pathh = path.resolve(__dirname,'public');
 app.use(express.static(pathh));
 app.use(bodyParser.urlencoded({extended:false}));
 
-app.get("/", upload.single('pic'), async (req, res) => {
+app.get("/", async (req, res) => {
     try {  
         const data = await Usermodel.find().exec();
         if (data.length > 0) {
@@ -47,7 +47,7 @@ app.get("/", upload.single('pic'), async (req, res) => {
     }
 });
 
-app.post("/", async (req, res) => {
+app.post("/", upload.single('pic'), async (req, res) => {
     try {
         const x = 'uploads/' + req.file.originalname;
         const temp = new Usermodel({
