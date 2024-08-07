@@ -48,7 +48,7 @@ app.get("/", async (req, res) => {
     }
 });
 
-app.post("/", upload.single('pic'), async (req, res) => {
+app.post("/", upload.any(), async (req, res) => {
     try {
         // const x = 'uploads/' + req.file.originalname;
         const temp = new Usermodel({
@@ -78,17 +78,6 @@ app.get("/download/:id", async (req, res) => {
     }
 });
 
-app.get('/download/:id',(req,res)=>{
-    Usermodel.find({_id:req.params.id},(err,data)=>{
-         if(err){
-             console.log(err)
-         }
-         else{
-             var x= __dirname+'/public/'+data[0].picpath;
-             res.download(x)
-         }
-    })
-})
 
 app.get("/list", async (req, res) => {
     try {
