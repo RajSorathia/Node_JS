@@ -9,18 +9,26 @@ const Usermodel = require("./models/user");
 
 const uri = 'mongodb+srv://rajsorathiyaacusion:rajacusion@cluster0.z8vtgf7.mongodb.net/UploadFileData?retryWrites=true&w=majority&appName=Cluster0';
 
-// const storage = multer.diskStorage({
-//     destination:function(req,file,cb){
-//         cb(null,'./uploads')
-//     },
-//     filename:function(req,file,cb){
-//         cb(null,file.originalname)
-//     }
-// })
-// const upload = multer({storage:storage});
+const storage = multer.diskStorage({
+    destination:function(req,file,cb){
+        cb(null,'.public/uploads')
+    },
+    filename:function(req,file,cb){
+        cb(null,file.originalname)
+    }
+});
 
-
-const upload = multer();
+const upload = multer({
+    storage:storage,
+    fileFilter : (req, file, cb) => {
+        if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg"){
+            cb(null, true);
+        } else {
+            cb(null, false);
+            return cb(new Error('Only .png .jpg and .jpeg files are allowed'));
+        }
+    }
+}).single('pic');
 const app = express();
 
 mongoose.connect(uri)
@@ -47,7 +55,7 @@ app.get("/", async (req, res) => {
     }
 });
 
-app.post("/", upload.single('pic'), async (req, res) => {
+app.post("/", async (req, res) => {
     try {
         const x = 'uploads/' + req.file.originalname;
         const temp = new Usermodel({
@@ -66,7 +74,7 @@ app.post("/", upload.single('pic'), async (req, res) => {
 //     var temp = new Usermodel({
 //         picpath:x
 //     })
-//     temp.save((err,data)=>{
+//     temp.save((err,data)=>{  
 //         if(err){
 //             console.log(err)
 //         }
