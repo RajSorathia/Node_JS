@@ -32,7 +32,7 @@ app.use(express.static(pathh));
 app.use(bodyParser.urlencoded({extended:false}));
 
 app.get("/", async (req, res) => {
-    try {
+    try {  
         const data = await Usermodel.find().exec();
         if (data.length > 0) {
             res.render('homepage', { data: data });
@@ -62,21 +62,33 @@ app.post("/", upload.single('pic'), async (req, res) => {
     }
 });
 
-app.get("/download/:id", async (req, res) => {
-    try {
-        const data = await Usermodel.findById(req.params.id).exec();
-        if (data && data.picpath) {
-            // Change this line
-            const x = path.join(__dirname, data.picpath);
-            res.download(x);
-        } else {
-            res.status(404).send('File not found or picpath is undefined');
-        }
-    } catch (err) {
-        console.log(err);
-        res.status(500).send('An error occurred');
-    }
-});
+// app.get("/download/:id", async (req, res) => {
+//     try {
+//         const data = await Usermodel.findById(req.params.id).exec();
+//         if (data && data.picpath) {
+//             // Change this line
+//             const x = path.join(__dirname, data.picpath);
+//             res.download(x);
+//         } else {
+//             res.status(404).send('File not found or picpath is undefined');
+//         }
+//     } catch (err) {
+//         console.log(err);
+//         res.status(500).send('An error occurred');
+//     }
+// });
+
+app.get('/download/:id',(req,res)=>{
+    picModel.find({_id:req.params.id},(err,data)=>{
+         if(err){
+             console.log(err)
+         }
+         else{
+             var x= __dirname+'/public/'+data[0].picpath;
+             res.download(x)
+         }
+    })
+})
 
 app.get("/list", async (req, res) => {
     try {
