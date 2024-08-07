@@ -11,7 +11,7 @@ const uri = 'mongodb+srv://rajsorathiyaacusion:rajacusion@cluster0.z8vtgf7.mongo
 
 const storage = multer.diskStorage({
     destination:function(req,file,cb){
-        cb(null,'.uploads/')
+        cb(null,'.public/uploads/')
     },
     filename:function(req,file,cb){
         cb(null,file.originalname)
@@ -91,7 +91,7 @@ app.post("/", upload.single('pic'), async (req, res) => {
 // });
 
 app.get('/download/:id',(req,res)=>{
-    picModel.find({_id:req.params.id},(err,data)=>{
+    Usermodel.find({_id:req.params.id},(err,data)=>{
          if(err){
              console.log(err)
          }
