@@ -9,16 +9,18 @@ const Usermodel = require("./models/user");
 
 const uri = 'mongodb+srv://rajsorathiyaacusion:rajacusion@cluster0.z8vtgf7.mongodb.net/UploadFileData?retryWrites=true&w=majority&appName=Cluster0';
 
-const storage = multer.diskStorage({
-    destination:function(req,file,cb){
-        cb(null,'./uploads')
-    },
-    filename:function(req,file,cb){
-        cb(null,file.originalname)
-    }
-})
-const upload = multer({storage:storage});
+// const storage = multer.diskStorage({
+//     destination:function(req,file,cb){
+//         cb(null,'./uploads')
+//     },
+//     filename:function(req,file,cb){
+//         cb(null,file.originalname)
+//     }
+// })
+// const upload = multer({storage:storage});
 
+
+const upload = multer();
 const app = express();
 
 mongoose.connect(uri)
